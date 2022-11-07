@@ -103,3 +103,28 @@ The first thing we will do here is to update the Task component to receive a new
     }
 
     // [..]
+
+## Removing a task
+
+Another wonderful feature to include to the Todo application is an option to completely remove a task whether it has been completed or not. We can do this in similar steps like the ones we used in creating the complete feature.
+
+Let’s start by updating the Task component to receive a removeTask prop and include an “X” button that deletes a task on click:
+
+`// File: Todo.js
+
+    // [...]
+
+    function Task({ task, index, completeTask, removeTask }) {
+        return (
+            <div
+                className="task"
+                style={{ textDecoration: task.completed ? "line-through" : "" }}
+            >
+                {task.title}
+                <button style={{ background: "red" }} onClick={() => removeTask(index)}>x</button>
+                <button onClick={() => completeTask(index)}>Complete</button>
+            </div>
+        );
+    }
+
+    // [...]`

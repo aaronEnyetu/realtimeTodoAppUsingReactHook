@@ -5,11 +5,15 @@ import './Todo.css';
 
 //the Task component returns some JSX to define what each task element will look like
 //update the Task component to receive a new prop and include a Complete button:
-function Task({ task, index, completeTask }) {
+//updating the Task component to receive a removeTask prop and include an “X” button that deletes a task on click:
+function Task({ task, index, completeTask, removeTask }) {
   return (
     <div className="task" style={{ textDecoration: task.completed ? 'line-through' : '' }}>
       {task.title}
       <button onClick={() => completeTask(index)}>Complete</button>
+      <button style={{ background: 'red' }} onClick={() => removeTask(index)}>
+        x
+      </button>
     </div>
   );
 }
@@ -44,13 +48,26 @@ function Todo() {
     setTasks(newTasks);
   };
 
+  //update the Todo component to register the removeTask method and pass it down as a prop to the Task component in the JSX:
+  const removeTask = (index) => {
+    const newTasks = [...tasks];
+    newTasks.splice(index, 1);
+    setTasks(newTasks);
+  };
+
   //We finally return some JSX within the Todo component and nest the Task component.
   return (
     <div className="todo-container">
       <div className="header">TODO - ITEMS</div>
       <div className="tasks">
         {tasks.map((task, index) => (
-          <Task task={task} completeTask={completeTask} index={index} key={index} />
+          <Task
+            task={task}
+            completeTask={completeTask}
+            removeTask={removeTask}
+            index={index}
+            key={index}
+          /> //added completeTask
         ))}
       </div>
       <div className="create-task">
