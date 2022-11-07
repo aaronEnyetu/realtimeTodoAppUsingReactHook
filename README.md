@@ -67,3 +67,39 @@ Introducing React Hooks, using the useState() and useEffect() methods.
     $ npm start
 
 We run the command on the third line because we want to install specific versions of react and react-dom (currently in alpha) in order to tap into React Hooks
+
+## Create components
+
+We will create a components folder in the src directory and add two files within it:
+
+Todo.js - This is where all of our functional components will go.
+Todo.css - This is where the styles for the application will go.
+
+## Running the application
+
+Open the App.js file and update
+`import Todo from './components/Todo';`
+
+## Completing a task
+
+At this point, we need to be able to indicate that we have completed a task. Our tasks object in the Todo component already makes that possible as there is a completed key-value pair. What we need now is an interactive way for the user to set a task as completed without hard-coding the data.
+
+The first thing we will do here is to update the Task component to receive a new prop and include a Complete button:
+
+    // Todo.js
+
+    // [...]
+
+    function Task({ task, index, completeTask }) {
+        return (
+            <div
+                className="task"
+                style={{ textDecoration: task.completed ? "line-through" : "" }}
+            >
+                {task.title}
+                <button onClick={() => completeTask(index)}>Complete</button>
+            </div>
+        );
+    }
+
+    // [..]

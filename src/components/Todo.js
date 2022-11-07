@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import './Todo.css';
 
 //the Task component returns some JSX to define what each task element will look like
-function Task({ task }) {
+//update the Task component to receive a new prop and include a Complete button:
+function Task({ task, index, completeTask }) {
   return (
     <div className="task" style={{ textDecoration: task.completed ? 'line-through' : '' }}>
       {task.title}
+      <button onClick={() => completeTask(index)}>Complete</button>
     </div>
   );
 }
@@ -30,17 +32,60 @@ function Todo() {
     },
   ]);
 
+  const addTask = (title) => {
+    const newTasks = [...tasks, { title, completed: false }];
+    setTasks(newTasks);
+  };
+
+  //update the Todo component to define the completeTask method and pass it down as a prop to the Task component in the JSX:
+  const completeTask = (index) => {
+    const newTasks = [...tasks];
+    newTasks[index].completed = true;
+    setTasks(newTasks);
+  };
+
   //We finally return some JSX within the Todo component and nest the Task component.
   return (
     <div className="todo-container">
-      <div className="header"> TODO - ITEMS</div>
+      <div className="header">TODO - ITEMS</div>
       <div className="tasks">
         {tasks.map((task, index) => (
-          <Task task={task} index={index} key={index} />
+          <Task task={task} completeTask={completeTask} index={index} key={index} />
         ))}
+      </div>
+      <div className="create-task">
+        <CreateTask addTask={addTask} />
       </div>
     </div>
   );
 }
+//the above code currently works with hard-coded data and has no way to receive input in realtime
+//Let’s create a new functional component and call it CreateTask:
 
+//The CreateTask component receives a prop addTask, which is basically the function that adds a new task to the tasks state on the Todo component.
+//We want to define this function and also update the JSX of the Todo component so it includes the CreateTask component.
+function CreateTask({ addTask }) {
+  //Using useState, this component registers a state — value — and a function for updating it — setValue.
+  const [value, setValue] = useState('');
+
+  //The handleSubmit handler will prevent the default action that would normally be taken on the form and add a new Task using the latest value that is in the input field.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!value) return;
+    addTask(value);
+    setValue('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        className="input"
+        value={value}
+        placeholder="Add a new task"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </form>
+  );
+}
 export default Todo;
