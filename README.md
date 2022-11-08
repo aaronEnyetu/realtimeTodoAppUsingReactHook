@@ -128,3 +128,18 @@ Let’s start by updating the Task component to receive a removeTask prop and in
     }
 
     // [...]`
+
+## Using useEffect to monitor the number of uncompleted tasks remaining
+
+We will use the useEffect state Hook to update the number of pending tasks whenever the DOM is re-rendered.
+
+First of all, we need to pull in useEffect from the react library:
+
+`import React, { useState, useEffect } from 'react';`
+Then we will register a new state Hook for the pending tasks in the Todo component:
+
+    ````` const [tasksRemaining, setTasksRemaining] = useState(0); `````
+
+We will also add an effect hook to update the state of tasksRemaining when the DOM re-renders:
+
+    ```` useEffect(() => { setTasksRemaining(tasks.filter(task => !task.completed).length) }); ````

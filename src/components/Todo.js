@@ -1,6 +1,6 @@
 //In the beginning of this snippet, we are pulling in useState from the React library because we need it to manage the state within our functional components.
-
-import React, { useState } from 'react';
+//we will use the useEffect state Hook to update the number of pending tasks whenever the DOM is re-rendered.
+import React, { useState, useEffect } from 'react';
 import './Todo.css';
 
 //the Task component returns some JSX to define what each task element will look like
@@ -21,6 +21,8 @@ function Task({ task, index, completeTask, removeTask }) {
 //In the Todo component, the useState function returns an array with two elements.
 //The first item being the current state value for the tasks and the second being a function that can be used to update the tasks:
 function Todo() {
+  //register a new state Hook for the pending tasks in the Todo component:
+  const [tasksRemaining, setTasksRemaining] = useState(0);
   const [tasks, setTasks] = useState([
     {
       title: 'Do some gardening',
@@ -35,6 +37,11 @@ function Todo() {
       completed: false,
     },
   ]);
+  //add an effect hook to update the state of tasksRemaining when the DOM re-renders:
+  useEffect(() => {
+    /* eslint-disable-line*/
+    setTasksRemaining(tasks.filter((task) => !task.completed).length);
+  });
 
   const addTask = (title) => {
     const newTasks = [...tasks, { title, completed: false }];
@@ -59,6 +66,7 @@ function Todo() {
   return (
     <div className="todo-container">
       <div className="header">TODO - ITEMS</div>
+      <div className="header">Pending tasks ({tasksRemaining})</div>
       <div className="tasks">
         {tasks.map((task, index) => (
           <Task
